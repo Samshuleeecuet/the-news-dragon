@@ -18,8 +18,7 @@ const RightNav = () => {
                 </ListGroup>
             </div>
             <QZone></QZone>
-            <div className=''>
-                <img className='' src={bg} alt="" />
+            <div className='' style={{backgroundImage: `url(${bg})`, height: '400px',color:'white',padding:'10px'}}>
                 <div>
                     <h3>
                     Create an Amazing Newspaper
