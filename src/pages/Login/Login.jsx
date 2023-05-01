@@ -1,12 +1,31 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Container } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../providers/AuthProvider';
 
 const Login = () => {
+    const {signIn,setUser}=useContext(AuthContext);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || '/catagory/0';
+    const handleLogin = (e)=>{
+        e.preventDefault();
+        const form= e.target;
+        const email = form.email.value;
+        const password = form.password.value;
+        signIn(email,password)
+        .then((result)=>{
+            const loggedUser = result.user;
+            navigate(from,{replace:true});
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    }
     return (
         <Container>
-            <Form style={{margin: 'auto',marginTop:'20px', width:'400px'}}>
+            <Form onSubmit={handleLogin} style={{margin: 'auto',marginTop:'20px', width:'400px'}}>
             <h5>Please Login</h5>
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
@@ -17,9 +36,6 @@ const Login = () => {
             <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
                 <Form.Control type="password" name='password' placeholder="Password" required/>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" label="Check me out" />
             </Form.Group>
             <Button variant="primary" type="submit">
                 Login
